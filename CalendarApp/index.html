@@ -1,0 +1,87 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/styles/app.css" />
+    <script src="assets/scripts/app.js" defer></script>
+    <title>Live Calendar</title>
+  </head>
+  <body>
+ <div class="calendar" id="calendar">
+    
+
+    <div class="clear"></div>
+
+    <div class="calendar-dates">
+        <div class="days">
+            <div class="day label">SUN</div>
+            <div class="day label">MON</div>
+            <div class="day label">TUE</div>
+            <div class="day label">WED</div>
+            <div class="day label">THUR</div>
+            <div class="day label">FRI</div>
+            <div class="day label">SAT</div>
+
+            <div class="clear"></div>
+        </div>
+
+        <div id="calendarDays" class="days">
+        </div>
+    </div>
+</div>
+<div id="backdrop"></div>
+    <div class="modal card" id="add-modal">
+      <div class="modal__content">
+        <label for="title">Event Title</label>
+        <input type="text" name="title" id="title" />
+        <label for="time">Event Time</label>
+        <input type="text" name="time" id="time" />
+        <label for="duration">Event Duration</label>
+        <input type="text" name="duration" id="duration" />
+        <label for="color">Event Color</label>
+        <select name="color" id="color">
+          <option value="red">red</option>
+          <option value="green">green</option>
+          <option value="blue">blue</option>
+          <option value="orange">orange</option>
+          <option value="yellow">yellow</option>
+          <option value="fuchsia">fuchsia</option>
+        </select>
+        <label for="description">Event Description</label>
+        <input type="text" name="description" id="description" />
+      </div>
+      <div class="modal__actions">
+        <button class="btn btn--passive">Cancel</button>
+        <button class="btn btn--success">Add</button>
+      </div>
+    </div>
+    <div class="modal card" id="delete-modal">
+      <h2 class="modal__title">Are you sure?</h2>
+      <p class="modal__content">
+        Are you sure you want to delete this item? This action can't be reversed!
+      </p>
+      <div class="modal__actions">
+        <button class="btn btn--passive">No (Cancel)</button>
+        <button class="btn btn--danger">Yes</button>
+      </div>
+    </div>
+    <footer>
+      <button id="clear-btn">Clear Selected</button>
+      <div class="month-btn" onclick="$('#months').toggle('slow')">
+        <span id="curMonth"></span>
+        <div id="months" class="dropdown"></div>
+    </div>
+
+    <div class="year-btn" onclick="$('#years').toggle('slow')">
+        <span id="curYear"></span>
+        <div id="years" class="dropdown "></div>
+    </div>
+      <button id="add-btn">Add Event</button>
+    </footer>
+    <div id="event-list" class="event-list">
+    </div>
+  </body>
+</html>
