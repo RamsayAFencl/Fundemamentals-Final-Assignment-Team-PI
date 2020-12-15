@@ -1,291 +1,278 @@
-class Myevent {
-    constructor(id, title, date, time, duration, color, description){
-        this.id = id;
-        this.title = title;
-        this.date = date; //array of date
-        this.time = time; //string that is mm/dd/yy
-        this.duration = duration; //xx.xx hours
-        this.color = color; //string
-        this.description = description; //string
-    }
+body,
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-var startYear = 2020;
-var endYear = 2030;
-var month = 0;
-var year = 0;
-var today = 0;
-
-const addEventModal = document.getElementById('add-modal');
-const startAddEventButton = document.querySelector('footer #add-btn');
-const backdrop = document.getElementById('backdrop');
-const cancelAddEventButton = addEventModal.querySelector('.btn--passive');
-const confirmAddEventButton = cancelAddEventButton.nextElementSibling;
-const userInputs = addEventModal.querySelectorAll('input');
-const entryTextSection = document.getElementById('entry-text');
-const deleteEventModal = document.getElementById('delete-modal');
-
-const clearButton = document.querySelector('footer #clear-btn');
-
-const Events = [];
-var selDays = []; 
-const currentMonth =  document.getElementById("curMonth");
-const currentYear = document.getElementById("curYear");
-const toggleSelected = (day) => {
-    day.classList.toggle('selected');
-  };
-  
-
-function loadCalendarMonths() {
-    for (var i = 0; i < months.length; i++) {
-        var doc = document.createElement("div");
-        doc.innerHTML = months[i];
-        doc.classList.add("dropdown-item");
-
-        doc.onclick = (function () {
-            var selectedMonth = i;
-            return function () {
-                month = selectedMonth;
-                document.getElementById("curMonth").innerHTML = months[month];
-                loadCalendarDays();
-                return month;
-            }
-        })();
-
-        document.getElementById("months").appendChild(doc);
-    }
+html {
+  font-family: sans-serif;
 }
 
-function loadCalendarYears() {
-    document.getElementById("years").innerHTML = "";
-
-    for (var i = startYear; i <= endYear; i++) {
-        var doc = document.createElement("div");
-        doc.innerHTML = i;
-        doc.classList.add("dropdown-item");
-        doc.onclick = (function () {
-            var selectedYear = i;
-            return function () {
-                year = selectedYear;
-                document.getElementById("curYear").innerHTML = year;
-                loadCalendarDays();
-                return year;
-            }
-        })();
-
-        document.getElementById("years").appendChild(doc);
-    }
+.calendar {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
 }
 
-function loadCalendarDays() {
-    document.getElementById("calendarDays").innerHTML = "";
-
-    var tmpDate = new Date(year, month, 0);
-    var num = daysInMonth(month, year);
-    var dayofweek = tmpDate.getDay();       // find where to start calendar day of week
-
-    for (var i = 0; i <= dayofweek; i++) {
-        let d = document.createElement("div");
-        // d.classList.add("day");
-        d.classList.add("blank");
-        document.getElementById("calendarDays").appendChild(d);
-    }
-
-    for (var i = 0; i < num; i++) {
-        var tmp = i + 1;
-        let d = document.createElement("div");
-        d.id = "calendarday_" + i;
-        d.className = "day";
-        d.setAttribute("date", new Date(year, month, tmp));
-        //console.log(d);
-        if (i === today.getDate() - 1 && month === today.getMonth() && year === today.getFullYear()) {
-            d.classList.add("today");
-        }
-        d.innerHTML = tmp;
-        d.onclick = (function () {
-            var selectedDay = d;
-            return function () {
-                day = selectedDay;
-                if (selDays.includes(day)){
-                    selDays.splice(selDays.indexOf(day), 1);
-                } else {
-                    selDays.push(day);
-                }
-                toggleSelected(day);
-                console.log(selDays);
-                updateDisplayEvents();
-            }
-        })();
-        document.getElementById("calendarDays").appendChild(d);
-    }
-
-    var clear = document.createElement("div");
-    clear.className = "clear";
-    document.getElementById("calendarDays").appendChild(clear);
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  color: #1caff6;
+  text-align: center;
+  font-size: 14pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 160px;
+  left: 0px;
+  z-index: 2000;
 }
 
-function daysInMonth(month, year)
-{
-    var d = new Date(year, month+1, 0);
-    return d.getDate();
+.dropdown {
+  cursor: pointer;
+  opacity: 0.95;
+  transition: 0.1s opacity;
 }
 
-window.addEventListener('load', function () {
-    var date = new Date();
-    month = date.getMonth();
-    year = date.getFullYear();
-    today = date;
-    currentMonth.innerHTML = months[month];
-    currentYear.innerHTML = year;
-    loadCalendarMonths();
-    loadCalendarYears();
-    loadCalendarDays();
-});
-
-const toggleBackdrop = () => {
-    backdrop.classList.toggle('visible');
-};
-
-const backdropClickHandler = () => {
-    closeEventModal();
-    closeEventDeletionModal();
-    clearEventInput();
-};
-
-const closeEventModal = () => {
-    addEventModal.classList.remove('visible');
-};
-  
-const showEventModal = () => {
-    // function() {}
-    addEventModal.classList.add('visible');
-    toggleBackdrop();
-};
-
-const clearEventInput = () => {
-    for (const usrInput of userInputs) {
-      usrInput.value = '';
-    }
-};
-
-const closeEventDeletionModal = () => {
-    toggleBackdrop();
-    deleteEventModal.classList.remove('visible');
-};
-
-const cancelAddEventHandler = () => {
-    closeEventModal();
-    toggleBackdrop();
-    clearEventInput();
-};
-
-const clearSelDays = () => {
-    for(let i of selDays){
-        toggleSelected(i);
-        //console.log(i);
-    }
-    selDays= [];
+.year-btn {
+  float: right;
+  background-color: #24aeff;
+  color: white;
+  text-align: center;
+  font-size: 14pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: relative;
+  width: 20%;
+  cursor: pointer;
+  transition: 0.5s background-color;
+}
+.day:hover,
+.dropdown-item:hover {
+  color: white;
+  background-color: #1f71a1;
 }
 
-const addEventHandler = () => {
-    const title = userInputs[0].value;
-    const time = userInputs[1].value;
-    const duration = userInputs[2].value;
-    const description = userInputs[3].value;
-    const id = Math.random().toString();
-    const color = document.getElementById('color').value;
-
-    if (
-      title.trim() === '' ||
-      time.trim() === '' ||
-      duration.trim() === '' ||
-      description.trim() === ''
-      
-    ) {
-      alert('Please enter valid values.');
-      return;
-    }
-  
-    for(let i of selDays){
-        date = i.getAttribute("date");
-        let newEvent = new Myevent(id, title, date, time, duration, color, description);
-        Events.push(newEvent);
-    }
-    
-    console.log(Events);
-    colorEventDays();
-    closeEventModal();
-    toggleBackdrop();
-    clearEventInput();
-    clearSelDays();
-
-};
-
-const colorEventDays = () => {
-    let days= document.getElementById("calendarDays").children;
-    for(let i of Events){
-        for(day of days){
-            if(i.date == day.getAttribute('date')){
-                let tempId = day.getAttribute('code');
-                if(tempId){
-                    if(!tempId.includes(i.id)){
-                        tempId+= "|"+i.id;
-                        day.setAttribute('code', tempId);
-                    }
-                }
-                else{
-                    day.setAttribute('code', i.id);
-                }
-                
-                
-                day.style.backgroundColor = i.color;
-                //console.log(i.color);
-                //console.log(day.style.backgroundColor);
-            }
-        }
-    }
+.day {
+  float: none;
+  height: 100%;
+  width: 100%;
+  margin: 5%;
+  padding: 1em;
+  font-size: 13pt;
+  text-align: center;
+  border: solid 1px #ddd;
 }
 
-function removeAllChildNodes(parent){
-    while (parent.firstChild){
-        parent.removeChild(parent.firstChild);
-    }
+.blank {
+  background-color: white;
+  border: none;
 }
 
-function updateDisplayEvents() {
-    let listRoot = document.getElementById('event-list');
-    console.log(listRoot);
-    removeAllChildNodes(listRoot);
-    for(let a of selDays){
-        let code = a.getAttribute("code");
-        if (code) {
-            let codes = code.split("|");
-            for (let i of codes) {
-                let temp = Events.find(e => (e.id == i));
-                renderNewEventElement(temp.id, temp.title, temp.description);
-            }
-        }
-    }
+.day.today {
+  background-color: grey;
+  color: white;
+  font-weight: bold;
+  border: none;
 }
 
-const renderNewEventElement = (id, title, description) => {
-    const listRoot = document.getElementById('event-list');
-    const newEventElement = document.createElement('li');
-    newEventElement.className = 'event-element';
-    newEventElement.innerHTML = `
-      <div class="event-element__info">
-        <h2>${title}</h2>
-        <p>${description}</p>
-        <button id="${id}-btn">Delete</button>
-      </div>
-    `;
-    listRoot.append(newEventElement);
-  };
-            
-startAddEventButton.addEventListener('click', showEventModal);
-backdrop.addEventListener('click', backdropClickHandler);
-cancelAddEventButton.addEventListener('click', cancelAddEventHandler);
-confirmAddEventButton.addEventListener('click', addEventHandler);
+.day.selected {
+  background-color: #1caff6;
+  color: white;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.5s opacity;
+}
 
-clearButton.addEventListener('click', clearSelDays);
+.day.label {
+  height: 40px;
+  background-color: white;
+  color: black;
+  border: none;
+  font-weight: bold;
+}
+
+.month-btn {
+  float: left;
+  background-color: #24aeff;
+  color: white;
+  text-align: center;
+  font-size: 14pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: relative;
+  width: 20%;
+  cursor: pointer;
+  transition: 0.5s background-color;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto;
+}
+
+.clear {
+  clear: both;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+
+#backdrop {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 10;
+  pointer-events: none;
+  display: none;
+}
+
+#backdrop.visible {
+  display: block;
+  pointer-events: all;
+}
+
+.modal {
+  position: fixed;
+  z-index: 100;
+  width: 80%;
+  top: 30vh;
+  left: 10%;
+  display: none;
+}
+
+.modal.visible {
+  display: block;
+  animation: fade-slide-in 0.3s ease-out forwards;
+}
+
+.modal .modal__title {
+  margin: 0;
+  padding: 1rem;
+  border-bottom: 1px solid #00329e;
+  background: #00329e;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+.modal .modal__content {
+  padding: 1rem;
+}
+
+.modal .modal__actions {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#add-modal .modal__content {
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2.5rem;
+  background: #00329e;
+}
+
+footer h1 {
+  margin: 0;
+  color: white;
+  font-size: 1.5rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  background: #f67722;
+  border: 1px solid #f67722;
+  color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+}
+
+footer button:hover,
+footer button:active {
+  background: #f3cc4b;
+  border-color: #f3cc4b;
+  color: #995200;
+}
+
+label {
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: #464646;
+}
+
+input,
+select {
+  font: inherit;
+  border: 1px solid #ccc;
+  padding: 0.4rem 0.2rem;
+  color: #383838;
+}
+
+.event-list {
+  list-style: none;
+  width: 40rem;
+  max-width: 90%;
+  margin: 1rem auto;
+  padding: 0;
+}
+
+.event-element__info {
+  display: flex;
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 15px;
+  flex-direction: column;
+}
+
+.event__info {
+  display: grid;
+  grid-template-columns: 70% 30%;
+}
+
+.event-element__info button {
+  float: right;
+  grid-template-columns: 1fr;
+  margin-top: 2%;
+}
+
+#left {
+  text-align: left;
+}
+
+#right {
+  text-align: right;
+}
+
+@media only screen and (max-width: 960px) {
+  .calendar {
+    width: 100%;
+    margin: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    position: relative;
+    left: 0px;
+  }
+  .modal {
+    width: 40rem;
+    left: calc(50% - 20rem);
+  }
+}
