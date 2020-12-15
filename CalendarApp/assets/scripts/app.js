@@ -80,7 +80,6 @@ function loadCalendarYears() {
 
 function loadCalendarDays() {
     clearSelDays();
-    updateDisplayEvents();
     document.getElementById("calendarDays").innerHTML = "";
 
     var tmpDate = new Date(year, month, 0);
@@ -245,7 +244,6 @@ const addEventHandler = () => {
     toggleBackdrop();
     clearEventInput();
     clearSelDays();
-    updateDisplayEvents();
     saveEvents(Events);
 };
 
@@ -345,7 +343,6 @@ const deleteEventHandler = (id, date) => {
     removeAllChildNodes(days);
     loadCalendarDays();
     clearSelDays();
-    updateDisplayEvents();
     saveEvents(Events);
 };
 
