@@ -236,10 +236,30 @@ select {
 }
 
 .event-element__info {
-  flex: 2;
+  display: flex;
   padding: 1rem;
   border: 1px solid black;
   border-radius: 15px;
+  flex-direction: column;
+}
+
+.event__info {
+  display: grid;
+  grid-template-columns: 70% 30%;
+}
+
+.event-element__info button {
+  float: right;
+  grid-template-columns: 1fr;
+  margin-top: 2%;
+}
+
+#left {
+  text-align: left;
+}
+
+#right {
+  text-align: right;
 }
 
 @media only screen and (max-width: 960px) {
